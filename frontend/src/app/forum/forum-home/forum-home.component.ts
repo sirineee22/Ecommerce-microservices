@@ -65,6 +65,10 @@ export class ForumHomeComponent implements OnInit, OnDestroy {
     return list;
   });
 
+  getCategoryName(categoryId: string): string {
+    return this.categories.find((c) => c.id === categoryId)?.name ?? categoryId;
+  }
+
   getCategoryIcon(icon: string): string {
     const icons: Record<string, string> = {
       check: '🛒',
@@ -122,6 +126,13 @@ export class ForumHomeComponent implements OnInit, OnDestroy {
     this.sortBy.set(value);
   }
 
+  resetFilters() {
+    this.searchInput = '';
+    this.searchQuery.set('');
+    this.selectedCategory.set(null);
+    this.loadDiscussions();
+  }
+
   deleteDiscussion(id: string, event: Event) {
     event.preventDefault();
     event.stopPropagation();
@@ -135,7 +146,6 @@ export class ForumHomeComponent implements OnInit, OnDestroy {
     switch (badge) {
       case 'pinned': return 'bg-[#1E3A8A] text-white';
       case 'hot': return 'bg-red-500 text-white';
-      case 'new': return 'bg-emerald-500 text-white';
       case 'popular': return 'bg-amber-400 text-amber-900';
       default: return '';
     }
@@ -145,15 +155,15 @@ export class ForumHomeComponent implements OnInit, OnDestroy {
     switch (badge) {
       case 'pinned': return 'Épinglé';
       case 'hot': return 'Hot';
-      case 'new': return 'Nouveau';
       case 'popular': return 'Populaire';
       default: return '';
     }
   }
 
   getBadgeIcon(badge?: DiscussionBadge): string {
+    if (badge === 'pinned') return '📌';
     if (badge === 'hot') return '🔥';
-    if (badge === 'new' || badge === 'popular') return '★';
+    if (badge === 'popular') return '★';
     return '';
   }
 }
