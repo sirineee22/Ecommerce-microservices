@@ -1,0 +1,76 @@
+<main class="bg-gray-50 py-10 md:py-16 min-h-screen">
+  <section class="mx-auto max-w-3xl px-4 2xl:px-0">
+    <div
+      *ngIf="loading"
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-center text-gray-600"
+    >
+      Loading event...
+    </div>
+
+    <div
+      *ngIf="error && !loading"
+      class="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700"
+    >
+      {{ error }}
+    </div>
+
+    <article
+      *ngIf="event && !loading && !error"
+      class="mt-6 bg-white rounded-2xl border border-gray-200 p-8 myshop-card"
+    >
+      <p class="text-sm font-medium text-[#06B6D4] uppercase tracking-wide mb-2">
+        Event
+      </p>
+      <h1 class="text-3xl font-bold text-gray-900 font-['Poppins']">
+        {{ event.title }}
+      </h1>
+      <p class="mt-2 text-gray-500 flex items-center gap-2">
+        <span
+          class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#1E3A8A]/10 text-[#1E3A8A] text-sm"
+        >
+          📍
+        </span>
+        <span>{{ event.location }}</span>
+      </p>
+
+      <dl
+        class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 text-sm text-gray-700"
+      >
+        <div class="flex flex-col">
+          <dt class="font-semibold text-gray-900">Start</dt>
+          <dd>{{ event.startDate | date: 'fullDate' }} ·
+            {{ event.startDate | date: 'shortTime' }}</dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class="font-semibold text-gray-900">End</dt>
+          <dd>{{ event.endDate | date: 'fullDate' }} ·
+            {{ event.endDate | date: 'shortTime' }}</dd>
+        </div>
+      </dl>
+
+      <div class="mt-6 text-gray-700 leading-relaxed">
+        <h2 class="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+        <p>
+          {{ event.description }}
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button
+          type="button"
+          class="myshop-btn-primary px-5 py-2 text-sm"
+          (click)="backToList()"
+        >
+          Back to Events
+        </button>
+        <button
+          type="button"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+          (click)="editEvent()"
+        >
+          Edit Event
+        </button>
+      </div>
+    </article>
+  </section>
+</main>
