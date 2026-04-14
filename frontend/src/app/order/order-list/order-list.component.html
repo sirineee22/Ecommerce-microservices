@@ -1,0 +1,62 @@
+<div class="p-6 md:p-10">
+
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-3xl font-bold text-gray-900 font-['Poppins']">My Orders</h2>
+    <button
+      routerLink="/order/new"
+      class="bg-[#1E3A8A] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-800 transition-colors cursor-pointer"
+    >
+      + New Order
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="flex justify-center items-center h-40">
+      <div class="w-8 h-8 border-4 border-[#1E3A8A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  }
+
+  @if (error) {
+    <div class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">{{ error }}</div>
+  }
+
+  @if (!loading && orders.length === 0) {
+    <div class="text-center py-16 text-gray-400">
+      <p class="text-5xl mb-4">📦</p>
+      <p class="text-lg font-medium">No orders yet</p>
+      <p class="text-sm mt-1">Place your first order now!</p>
+    </div>
+  }
+
+  @if (!loading && orders.length > 0) {
+    <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-4 font-semibold text-gray-600">#ID</th>
+            <th class="px-6 py-4 font-semibold text-gray-600">Product ID</th>
+            <th class="px-6 py-4 font-semibold text-gray-600">Quantity</th>
+            <th class="px-6 py-4 font-semibold text-gray-600">Total Price</th>
+            <th class="px-6 py-4 font-semibold text-gray-600">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (order of orders; track order.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 font-medium text-gray-900">{{ order.id }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ order.productId }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ order.quantity }}</td>
+              <td class="px-6 py-4 font-semibold text-gray-900">${{ order.totalPrice?.toFixed(2) }}</td>
+              <td class="px-6 py-4">
+                <span [class]="'px-3 py-1 rounded-full text-xs font-semibold ' + getStatusClass(order.status)">
+                  {{ order.status }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</div>
