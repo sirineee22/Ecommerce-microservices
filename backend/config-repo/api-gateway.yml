@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Product Service
+        url: /product-service/v3/api-docs
+        displayName: Product Service
+  api-docs:
+    path: /v3/api-docs
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak-auth:8080/realms/ecommerce-realm
+          jwk-set-uri: http://keycloak-auth:8080/realms/ecommerce-realm/protocol/openid-connect/certs
