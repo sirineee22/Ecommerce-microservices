@@ -1,0 +1,216 @@
+<main class="min-h-screen bg-[#f8fafc]">
+  <!-- Premium Community Header -->
+  <div class="bg-white border-b border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-14 flex flex-col md:flex-row gap-8 items-center justify-between">
+      <div class="text-center md:text-left flex-1">
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50/50 border border-blue-100/50 text-[#1E3A8A] text-[10px] font-bold uppercase tracking-[0.15em] mb-4">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-600"></span>
+          </span>
+          Espace Communautaire
+        </div>
+        <h1 class="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight leading-tight">
+          Communauté <span class="text-[#1E3A8A]">MyShop</span>
+        </h1>
+        <p class="text-slate-500 text-lg font-medium mt-3 max-w-xl mx-auto md:mx-0">Discutez, apprenez et partagez votre
+          expertise avec les leaders de la marketplace.</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+        <div class="relative w-full sm:w-80 group">
+          <input type="search" [(ngModel)]="searchInput" (ngModelChange)="onSearchInput()"
+            placeholder="Rechercher une discussion..."
+            class="w-full pl-12 pr-4 py-4 rounded-2xl border border-slate-200 bg-[#fbfcfd] text-slate-900 placeholder-slate-400 focus:ring-8 focus:ring-blue-50/30 focus:border-[#1E3A8A] focus:bg-white outline-none transition-all duration-300 shadow-sm" />
+          <svg
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-[#1E3A8A] transition-colors"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <a routerLink="/forum/new"
+          class="w-full sm:w-auto bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm transition-all shadow-xl shadow-slate-200 hover:-translate-y-1 flex items-center justify-center gap-3 group">
+          <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Nouveau Post</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+      <!-- Sidebar / Exploration -->
+      <aside class="lg:col-span-3 space-y-8">
+        <div class="bg-white rounded-[24px] border border-slate-200 shadow-sm p-6 overflow-hidden relative">
+          <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50/30 rounded-bl-full -z-0"></div>
+          <h3 class="text-slate-600 font-bold text-[10px] uppercase tracking-widest mb-6 relative z-10">Navigation</h3>
+
+          <div class="space-y-1.5 relative z-10">
+            <button (click)="selectCategory(null)"
+              [class]="!selectedCategory() ? 'bg-blue-50 text-[#1E3A8A]' : 'text-slate-600 hover:bg-slate-50'"
+              class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all">
+              <span>🌐 Toutes les catégories</span>
+              <span class="text-[10px] font-bold text-slate-600">{{ discussions().length }}</span>
+            </button>
+
+            @for (cat of categoriesWithCount(); track cat.id) {
+            <button (click)="selectCategory(cat.id)"
+              [class]="selectedCategory() === cat.id ? 'bg-blue-50 text-[#1E3A8A]' : 'text-slate-600 hover:bg-slate-50'"
+              class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-black transition-all">
+              <span class="truncate">{{ getCategoryIcon(cat.icon) }} {{ cat.name }}</span>
+              <span class="text-[10px] font-black text-slate-600">{{ cat.count }}</span>
+            </button>
+            }
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-slate-50 flex p-1 bg-slate-50/50 rounded-xl">
+            <button (click)="selectSort('recent')"
+              [class]="sortBy() === 'recent' ? 'bg-white text-[#1E3A8A] shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+              class="flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all">Récents</button>
+            <button (click)="selectSort('popular')"
+              [class]="sortBy() === 'popular' ? 'bg-white text-[#1E3A8A] shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+              class="flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all">Populaires</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] border border-slate-200 shadow-sm p-7">
+          <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-widest mb-6 px-1">Top Experts</h3>
+          <div class="space-y-5">
+            @for (m of topMembers; track m.id) {
+            <div class="flex items-center gap-4 group cursor-pointer">
+              <div
+                class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1E3A8A] font-black text-xs group-hover:bg-[#1E3A8A] group-hover:text-white transition-all duration-300">
+                {{ m.initials }}
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-black text-slate-800 truncate leading-tight mb-0.5">{{ m.name }}</p>
+                <p class="text-[10px] text-emerald-600 font-black tracking-tight uppercase">{{ m.points }} pts</p>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </aside>
+
+      <!-- Discussions -->
+      <section class="lg:col-span-9 space-y-6">
+        <div class="flex items-center justify-between mb-2 px-2">
+          <div class="flex items-center gap-3">
+            <h2 class="text-2xl font-bold text-slate-900">Actualités</h2>
+            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+          </div>
+          <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+            </svg>
+            {{ filteredDiscussions().length }} sujets trouvés
+          </span>
+        </div>
+
+        @if (loading()) {
+        <div class="text-center py-32 bg-white rounded-[32px] border border-slate-100 shadow-sm">
+          <div class="w-10 h-10 border-4 border-slate-50 border-t-[#1E3A8A] rounded-full animate-spin mx-auto mb-6">
+          </div>
+          <p class="text-[10px] text-slate-600 font-black uppercase tracking-widest">Synchronisation du flux...</p>
+        </div>
+        } @else if (filteredDiscussions().length === 0) {
+        <div class="bg-white rounded-[32px] border border-slate-200 p-20 text-center shadow-sm">
+          <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-8">
+            <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 mb-2">Aucune discussion trouvée</h3>
+          <p class="text-slate-500 text-sm mb-10 max-w-sm mx-auto font-medium">Affinez vos filtres ou effectuez une
+            nouvelle recherche pour explorer le forum.</p>
+          <button (click)="resetFilters()"
+            class="text-[#1E3A8A] text-xs font-black px-8 py-3 bg-blue-50 rounded-xl hover:bg-[#1E3A8A] hover:text-white transition-all duration-300">
+            Réinitialiser les filtres
+          </button>
+        </div>
+        } @else {
+        @for (d of filteredDiscussions(); track d.id) {
+        <div class="group relative">
+          <button (click)="deleteDiscussion(d.id, $event)"
+            class="absolute top-6 right-8 p-2 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100 z-20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+
+          <a [routerLink]="['/forum', 'discussions', d.id]"
+            class="block bg-white border border-slate-200 rounded-[32px] p-10 hover:border-[#1E3A8A]/40 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500 relative overflow-hidden group/card shadow-sm">
+
+            <div class="flex gap-8">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-4">
+                  @if (d.badge) {
+                  <span [class]="getBadgeClass(d.badge)"
+                    class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-sm">
+                    {{ getBadgeIcon(d.badge) }} {{ getBadgeLabel(d.badge) }}
+                  </span>
+                  }
+                  <span class="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">{{ d.createdAt }}</span>
+                </div>
+
+                <h3
+                  class="text-xl lg:text-2xl font-semibold text-slate-900 mb-2 group-hover/card:text-[#1E3A8A] transition-colors truncate tracking-tight">
+                  {{ d.title }}
+                </h3>
+                <p class="text-slate-600 text-sm lg:text-base font-medium line-clamp-1 mb-8 leading-relaxed">{{
+                  d.excerpt }}</p>
+
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white text-[11px] font-bold shadow-lg shadow-slate-200">
+                      {{ d.author.initials }}
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-slate-800 truncate leading-none mb-1">{{ d.author.name }}</p>
+                      <p class="text-[9px] font-bold text-[#1E3A8A] uppercase tracking-wider">{{
+                        getCategoryName(d.categoryId) }}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-6 text-slate-600">
+                    <div class="flex items-center gap-2 group/stat">
+                      <svg class="w-5 h-5 transition-colors group-hover/stat:text-[#1E3A8A]" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      <span class="text-xs font-black text-slate-900 tracking-tighter">{{ d.comments }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 group/stat">
+                      <svg class="w-5 h-5 transition-colors group-hover/stat:text-[#1E3A8A]" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      <span class="text-xs font-black text-slate-900 tracking-tighter">{{ d.views }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        }
+        }
+      </section>
+
+    </div>
+  </div>
+</main>

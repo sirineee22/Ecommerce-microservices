@@ -11,7 +11,8 @@ ecommerce-microservices/
 ├── backend/
 │   ├── discovery-server/  # Eureka Server - Service Discovery (port 8761)
 │   ├── api-gateway/       # Spring Cloud Gateway - API Routing (port 8080)
-│   └── services/          # Microservices (to be added)
+│   └── services/
+│       └── forum-service/ # Forum API (port 8084)
 ```
 
 ## Tech Stack
@@ -23,7 +24,7 @@ ecommerce-microservices/
 
 **Backend**
 - Spring Boot, Eureka, Spring Cloud Gateway
-- Ready for microservices (product, order, user) to be added
+- Forum service with JPA/H2
 
 ## Prerequisites
 
@@ -51,7 +52,16 @@ mvn spring-boot:run
 
 Runs at: http://localhost:8080
 
-### 3. Start Frontend
+### 3. Start Forum Service
+
+```bash
+cd backend/services/forum-service
+mvn spring-boot:run
+```
+
+Runs at: http://localhost:8084
+
+### 4. Start Frontend
 
 ```bash
 cd frontend
@@ -61,7 +71,9 @@ npm start
 
 Runs at: http://localhost:4200
 
-> **Note:** The frontend currently uses FakeStore API directly. Update `src/environments/` to point to the API Gateway when backend services are deployed.
+**Forum API** (via Gateway): `http://localhost:8080/api/forum/discussions`
+
+> **Note:** The frontend forum currently uses mock data. Update the forum service to consume `http://localhost:8080/api/forum` when ready.
 
 ## Service Ports
 
@@ -69,4 +81,5 @@ Runs at: http://localhost:4200
 |------------------|------|
 | Discovery Server | 8761 |
 | API Gateway      | 8080 |
+| Forum Service    | 8084 |
 | Frontend         | 4200 |

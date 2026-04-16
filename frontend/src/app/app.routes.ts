@@ -4,6 +4,10 @@ import { CartComponent } from './cart/cart.component';
 import { ProductComponent } from './product/product.component';
 import { PaymentSuccessComponent } from './payment/payment-success/payment-success.component';
 import { ProductManagerComponent } from './product/product-manager/product-manager.component';
+import { ForumComponent } from './forum/forum.component';
+import { ForumHomeComponent } from './forum/forum-home/forum-home.component';
+import { DiscussionDetailComponent } from './forum/discussion-detail/discussion-detail.component';
+import { NewPostComponent } from './forum/new-post/new-post.component';
 
 export const routes: Routes = [
   {
@@ -25,5 +29,14 @@ export const routes: Routes = [
   {
     path: 'PaymentSuccess',
     component: PaymentSuccessComponent,
+  },
+  {
+    path: 'forum',
+    component: ForumComponent,
+    children: [
+      { path: '', component: ForumHomeComponent },
+      { path: 'new', component: NewPostComponent },
+      { path: 'discussions/:id', component: DiscussionDetailComponent },
+    ],
   },
 ];
