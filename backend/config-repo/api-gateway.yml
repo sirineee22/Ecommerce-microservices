@@ -1,9 +1,22 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/ecommerce-realm
+          jwk-set-uri: http://localhost:8181/realms/ecommerce-realm/protocol/openid-connect/certs
   cloud:
     gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods: "*"
+            allowedHeaders: "*"
       discovery:
         locator:
           enabled: true
@@ -15,17 +28,20 @@ spring:
             - Path=/product-service/**
           filters:
             - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+        - id: delivery-service
+          uri: lb://delivery-service
+          predicates:
+            - Path=/delivery-service/**
+          filters:
+            - RewritePath=/delivery-service/(?<segment>.*), /$\{segment}
 springdoc:
   swagger-ui:
     urls:
       - name: Product Service
         url: /product-service/v3/api-docs
         displayName: Product Service
+      - name: Delivery Service
+        url: /delivery-service/v3/api-docs
+        displayName: Delivery Service
   api-docs:
     path: /v3/api-docs
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://keycloak-auth:8080/realms/ecommerce-realm
-          jwk-set-uri: http://keycloak-auth:8080/realms/ecommerce-realm/protocol/openid-connect/certs

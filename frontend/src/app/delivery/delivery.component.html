@@ -1,0 +1,79 @@
+<main class="bg-gray-50 py-10 md:py-16 min-h-screen">
+  <section class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <div class="mb-8">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 font-['Poppins']">
+        Delivery Management
+      </h2>
+      <p class="text-gray-500 mt-1">
+        Manage deliveries for your microservice module.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1 bg-white border border-gray-200 rounded-2xl p-5">
+        <h3 class="font-semibold text-gray-900 mb-4">Create Delivery</h3>
+
+        <form (ngSubmit)="onSubmit()" class="space-y-3">
+          <input [(ngModel)]="form.orderId" name="orderId" type="number" placeholder="Order ID" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.customerId" name="customerId" placeholder="Customer ID" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.address" name="address" placeholder="Address" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.city" name="city" placeholder="City" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.postalCode" name="postalCode" placeholder="Postal code" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.country" name="country" placeholder="Country" required class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.carrier" name="carrier" placeholder="Carrier (optional)" class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.trackingNumber" name="trackingNumber" placeholder="Tracking number (optional)" class="w-full border rounded-xl px-3 py-2" />
+          <input [(ngModel)]="form.estimatedDeliveryDate" name="estimatedDeliveryDate" type="date" class="w-full border rounded-xl px-3 py-2" />
+
+          <button type="submit" class="myshop-btn-primary px-4 py-2 text-sm w-full">
+            Create
+          </button>
+        </form>
+      </div>
+
+      <div class="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-gray-900">Deliveries</h3>
+          <button type="button" class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200" (click)="loadDeliveries()">
+            Refresh
+          </button>
+        </div>
+
+        <div *ngIf="loading" class="text-gray-600">Loading deliveries...</div>
+
+        <div *ngIf="error" class="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-red-700">
+          {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !deliveries.length" class="text-gray-500">
+          No deliveries yet.
+        </div>
+
+        <div *ngIf="deliveries.length" class="space-y-3">
+          <article *ngFor="let d of deliveries" class="border border-gray-200 rounded-xl p-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p class="font-semibold text-gray-900">Delivery #{{ d.id }} - Order #{{ d.orderId }}</p>
+                <p class="text-sm text-gray-600">{{ d.address }}, {{ d.city }}, {{ d.country }}</p>
+                <p class="text-xs text-gray-500">Tracking: {{ d.trackingNumber || 'N/A' }}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700">{{ d.deliveryStatus }}</span>
+                <button type="button" class="px-2 py-1 text-xs rounded-lg bg-red-50 text-red-700 hover:bg-red-100" (click)="onDelete(d)">Delete</button>
+              </div>
+            </div>
+
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button
+                *ngFor="let status of statuses"
+                type="button"
+                class="px-2 py-1 text-xs rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                (click)="onStatusChange(d, status)">
+                {{ status }}
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

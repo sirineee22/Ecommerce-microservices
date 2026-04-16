@@ -3,6 +3,12 @@ spring:
     name: api-gateway
   config:
     import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:8888
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/ecommerce-realm
+          jwk-set-uri: http://localhost:8181/realms/ecommerce-realm/protocol/openid-connect/certs
   cloud:
     gateway:
       globalcors:

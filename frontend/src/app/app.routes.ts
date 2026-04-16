@@ -11,6 +11,7 @@ import { NewPostComponent } from './forum/new-post/new-post.component';
 import { EventListComponent } from './event/event-list.component';
 import { EventFormComponent } from './event/event-form.component';
 import { EventDetailComponent } from './event/event-detail.component';
+import { DeliveryComponent } from './delivery/delivery.component';
 
 export const routes: Routes = [
   {
@@ -57,5 +58,9 @@ export const routes: Routes = [
   {
     path: 'events/edit/:id',
     component: EventFormComponent,
+  },
+  {
+    path: 'delivery',
+    component: DeliveryComponent,
   },
 ];
