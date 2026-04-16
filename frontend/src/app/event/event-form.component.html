@@ -1,0 +1,144 @@
+<main class="bg-gray-50 py-10 md:py-16 min-h-screen">
+  <section class="mx-auto max-w-2xl px-4 2xl:px-0">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 font-['Poppins']">
+      {{ isEdit ? 'Edit Event' : 'Create Event' }}
+    </h1>
+    <p class="mt-1 text-gray-500 text-sm">
+      Add details about your event so customers can discover and schedule it.
+    </p>
+
+    <div
+      *ngIf="loading"
+      class="mt-4 rounded-2xl border border-gray-200 bg-white p-4 text-gray-600"
+    >
+      Loading event...
+    </div>
+
+    <div
+      *ngIf="error"
+      class="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700"
+    >
+      {{ error }}
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="mt-6 bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 myshop-card space-y-5"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-900 mb-1">
+          Title
+        </label>
+        <input
+          type="text"
+          class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+          formControlName="title"
+          [class.border-red-500]="form.controls.title.touched && form.controls.title.invalid"
+        />
+        <p
+          *ngIf="form.controls.title.touched && form.controls.title.errors?.['required']"
+          class="mt-1 text-sm text-red-600"
+        >
+          Title is required.
+        </p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-900 mb-1">
+          Description
+        </label>
+        <textarea
+          rows="3"
+          class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+          formControlName="description"
+          [class.border-red-500]="form.controls.description.touched && form.controls.description.invalid"
+        ></textarea>
+        <p
+          *ngIf="form.controls.description.touched && form.controls.description.errors?.['required']"
+          class="mt-1 text-sm text-red-600"
+        >
+          Description is required.
+        </p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-900 mb-1">
+          Location
+        </label>
+        <input
+          type="text"
+          class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+          formControlName="location"
+          [class.border-red-500]="form.controls.location.touched && form.controls.location.invalid"
+        />
+        <p
+          *ngIf="form.controls.location.touched && form.controls.location.errors?.['required']"
+          class="mt-1 text-sm text-red-600"
+        >
+          Location is required.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-900 mb-1">
+            Start Date
+          </label>
+          <input
+            type="datetime-local"
+            class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+            formControlName="startDate"
+            [class.border-red-500]="form.controls.startDate.touched && form.controls.startDate.invalid"
+          />
+          <p
+            *ngIf="form.controls.startDate.touched && form.controls.startDate.errors?.['required']"
+            class="mt-1 text-sm text-red-600"
+          >
+            Start date is required.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-900 mb-1">
+            End Date
+          </label>
+          <input
+            type="datetime-local"
+            class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-[#1E3A8A] focus:ring-[#1E3A8A]/20"
+            formControlName="endDate"
+            [class.border-red-500]="form.controls.endDate.touched && form.controls.endDate.invalid"
+          />
+          <p
+            *ngIf="form.controls.endDate.touched && form.controls.endDate.errors?.['required']"
+            class="mt-1 text-sm text-red-600"
+          >
+            End date is required.
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="saving" class="text-sm text-gray-500">
+        Saving event...
+      </div>
+
+      <div class="pt-2 flex flex-wrap gap-3">
+        <button
+          type="submit"
+          class="myshop-btn-primary px-6 py-2 text-sm"
+          [disabled]="saving"
+        >
+          {{ isEdit ? 'Update Event' : 'Create Event' }}
+        </button>
+        <button
+          type="button"
+          class="px-5 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+          (click)="onCancel()"
+          [disabled]="saving"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </section>
+</main>

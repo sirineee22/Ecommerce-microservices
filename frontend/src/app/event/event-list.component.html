@@ -1,0 +1,127 @@
+<main class="bg-gray-50 py-10 md:py-16 min-h-screen">
+  <section class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <div
+      class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8"
+    >
+      <div>
+        <h2
+          class="text-2xl sm:text-3xl font-bold text-gray-900 font-['Poppins']"
+        >
+          Events
+        </h2>
+        <p class="text-gray-500 mt-1">
+          Discover upcoming events and manage your experiences for MyShop.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button
+          type="button"
+          class="myshop-btn-accent px-4 py-2 text-sm"
+          (click)="onAddTestEvent()"
+        >
+          Add Test Event
+        </button>
+        <button
+          type="button"
+          class="myshop-btn-primary px-4 py-2 text-sm"
+          (click)="onAdd()"
+        >
+          Create Event
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="loading"
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-center text-gray-600"
+    >
+      Loading events...
+    </div>
+
+    <div
+      *ngIf="error"
+      class="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700"
+    >
+      {{ error }}
+    </div>
+
+    <div
+      *ngIf="!loading && events.length"
+      class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+    >
+      <article
+        *ngFor="let event of events"
+        class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between myshop-card"
+      >
+        <div class="space-y-3">
+          <h3 class="text-lg font-bold text-gray-900 font-['Poppins']">
+            {{ event.title }}
+          </h3>
+          <p class="text-sm text-gray-500 flex items-center gap-2">
+            <span
+              class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1E3A8A]/10 text-[#1E3A8A] text-xs"
+              >📍</span
+            >
+            <span>{{ event.location }}</span>
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            <div class="text-gray-600">
+              <span class="font-medium text-gray-800">Start:</span>
+              <span class="block">{{ event.startDate | date: 'medium' }}</span>
+            </div>
+            <div class="text-gray-600">
+              <span class="font-medium text-gray-800">End:</span>
+              <span class="block">{{ event.endDate | date: 'medium' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            class="inline-flex items-center text-sm font-medium text-[#1E3A8A] hover:text-[#1D4ED8] transition-colors"
+            (click)="onView(event)"
+          >
+            View details
+          </button>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+              (click)="onEdit(event)"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
+              (click)="onDelete(event)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div
+      *ngIf="!loading && !events.length"
+      class="mt-6 rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center text-gray-500"
+    >
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">
+        No events yet
+      </h3>
+      <p class="mb-4">
+        Create your first event to engage your customers with promotions,
+        launches and more.
+      </p>
+      <button
+        type="button"
+        class="myshop-btn-primary px-6 py-2 text-sm"
+        (click)="onAdd()"
+      >
+        Create Event
+      </button>
+    </div>
+  </section>
+</main>

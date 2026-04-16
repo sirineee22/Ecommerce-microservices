@@ -8,6 +8,9 @@ import { ForumComponent } from './forum/forum.component';
 import { ForumHomeComponent } from './forum/forum-home/forum-home.component';
 import { DiscussionDetailComponent } from './forum/discussion-detail/discussion-detail.component';
 import { NewPostComponent } from './forum/new-post/new-post.component';
+import { EventListComponent } from './event/event-list.component';
+import { EventFormComponent } from './event/event-form.component';
+import { EventDetailComponent } from './event/event-detail.component';
 
 export const routes: Routes = [
   {
@@ -38,5 +41,21 @@ export const routes: Routes = [
       { path: 'new', component: NewPostComponent },
       { path: 'discussions/:id', component: DiscussionDetailComponent },
     ],
+  },
+  {
+    path: 'events',
+    component: EventListComponent,
+  },
+  {
+    path: 'events/new',
+    component: EventFormComponent,
+  },
+  {
+    path: 'events/:id',
+    component: EventDetailComponent,
+  },
+  {
+    path: 'events/edit/:id',
+    component: EventFormComponent,
   },
 ];
