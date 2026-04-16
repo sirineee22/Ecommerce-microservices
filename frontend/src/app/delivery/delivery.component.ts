@@ -21,13 +21,8 @@ export class DeliveryComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  readonly statuses: DeliveryStatus[] = [
-    'PENDING',
-    'ASSIGNED',
-    'IN_TRANSIT',
-    'DELIVERED',
-    'CANCELLED',
-  ];
+  /** When set, the left form updates this delivery instead of creating a new one. */
+  editingDeliveryId: number | null = null;
 
   form: DeliveryRequest = {
     orderId: 0,
@@ -63,6 +58,18 @@ export class DeliveryComponent implements OnInit {
 
   onSubmit(): void {
     this.error = null;
+    if (this.editingDeliveryId != null) {
+      this.deliveryService.update(this.editingDeliveryId, this.form).subscribe({
+        next: () => {
+          this.cancelEdit();
+          this.loadDeliveries();
+        },
+        error: (err) => {
+          this.error = err?.error?.error || 'Failed to update delivery.';
+        },
+      });
+      return;
+    }
     this.deliveryService.create(this.form).subscribe({
       next: () => {
         this.resetForm();
@@ -72,6 +79,43 @@ export class DeliveryComponent implements OnInit {
         this.error = err?.error?.error || 'Failed to create delivery.';
       },
     });
+  }
+
+  startEdit(d: Delivery): void {
+    this.error = null;
+    this.editingDeliveryId = d.id;
+    this.form = {
+      orderId: d.orderId,
+      customerId: d.customerId,
+      address: d.address,
+      city: d.city,
+      postalCode: d.postalCode,
+      country: d.country,
+      carrier: d.carrier ?? '',
+      trackingNumber: d.trackingNumber ?? '',
+      estimatedDeliveryDate: d.estimatedDeliveryDate
+        ? d.estimatedDeliveryDate.slice(0, 10)
+        : '',
+    };
+  }
+
+  cancelEdit(): void {
+    this.editingDeliveryId = null;
+    this.resetForm();
+  }
+
+  /** Same rules as the backend DeliveryService status transitions. */
+  allowedNextStatuses(current: DeliveryStatus): DeliveryStatus[] {
+    switch (current) {
+      case 'PENDING':
+        return ['ASSIGNED', 'CANCELLED'];
+      case 'ASSIGNED':
+        return ['IN_TRANSIT', 'CANCELLED'];
+      case 'IN_TRANSIT':
+        return ['DELIVERED'];
+      default:
+        return [];
+    }
   }
 
   onStatusChange(delivery: Delivery, status: DeliveryStatus): void {
@@ -96,6 +140,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   private resetForm(): void {
+    this.editingDeliveryId = null;
     this.form = {
       orderId: 0,
       customerId: '',

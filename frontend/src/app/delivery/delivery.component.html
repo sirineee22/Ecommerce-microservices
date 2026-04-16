@@ -11,7 +11,9 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1 bg-white border border-gray-200 rounded-2xl p-5">
-        <h3 class="font-semibold text-gray-900 mb-4">Create Delivery</h3>
+        <h3 class="font-semibold text-gray-900 mb-4">
+          {{ editingDeliveryId != null ? 'Edit delivery #' + editingDeliveryId : 'Create Delivery' }}
+        </h3>
 
         <form (ngSubmit)="onSubmit()" class="space-y-3">
           <input [(ngModel)]="form.orderId" name="orderId" type="number" placeholder="Order ID" required class="w-full border rounded-xl px-3 py-2" />
@@ -24,9 +26,18 @@
           <input [(ngModel)]="form.trackingNumber" name="trackingNumber" placeholder="Tracking number (optional)" class="w-full border rounded-xl px-3 py-2" />
           <input [(ngModel)]="form.estimatedDeliveryDate" name="estimatedDeliveryDate" type="date" class="w-full border rounded-xl px-3 py-2" />
 
-          <button type="submit" class="myshop-btn-primary px-4 py-2 text-sm w-full">
-            Create
-          </button>
+          <div class="flex flex-col gap-2">
+            <button type="submit" class="myshop-btn-primary px-4 py-2 text-sm w-full">
+              {{ editingDeliveryId != null ? 'Save changes' : 'Create' }}
+            </button>
+            <button
+              *ngIf="editingDeliveryId != null"
+              type="button"
+              class="px-4 py-2 text-sm w-full rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50"
+              (click)="cancelEdit()">
+              Cancel edit
+            </button>
+          </div>
         </form>
       </div>
 
@@ -58,19 +69,31 @@
               </div>
               <div class="flex items-center gap-2">
                 <span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700">{{ d.deliveryStatus }}</span>
+                <button
+                  type="button"
+                  class="px-2 py-1 text-xs rounded-lg bg-amber-50 text-amber-800 hover:bg-amber-100"
+                  (click)="startEdit(d)">
+                  Edit
+                </button>
                 <button type="button" class="px-2 py-1 text-xs rounded-lg bg-red-50 text-red-700 hover:bg-red-100" (click)="onDelete(d)">Delete</button>
               </div>
             </div>
 
-            <div class="mt-3 flex flex-wrap gap-2">
-              <button
-                *ngFor="let status of statuses"
-                type="button"
-                class="px-2 py-1 text-xs rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
-                (click)="onStatusChange(d, status)">
-                {{ status }}
-              </button>
+            <div *ngIf="allowedNextStatuses(d.deliveryStatus).length" class="mt-3">
+              <p class="text-xs text-gray-500 mb-2">Next status (until delivered):</p>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  *ngFor="let status of allowedNextStatuses(d.deliveryStatus)"
+                  type="button"
+                  class="px-2 py-1 text-xs rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  (click)="onStatusChange(d, status)">
+                  {{ status === 'DELIVERED' ? 'Delivered' : status }}
+                </button>
+              </div>
             </div>
+            <p *ngIf="!allowedNextStatuses(d.deliveryStatus).length" class="mt-3 text-xs text-gray-400">
+              No further status changes (delivered or cancelled).
+            </p>
           </article>
         </div>
       </div>

@@ -22,6 +22,10 @@ export class DeliveryService {
     return this.http.post<Delivery>(this.baseUrl, payload);
   }
 
+  update(id: number, payload: DeliveryRequest): Observable<Delivery> {
+    return this.http.put<Delivery>(`${this.baseUrl}/${id}`, payload);
+  }
+
   updateStatus(id: number, status: DeliveryStatus): Observable<Delivery> {
     return this.http.patch<Delivery>(`${this.baseUrl}/${id}/status?status=${status}`, {});
   }
