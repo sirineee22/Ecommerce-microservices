@@ -15,17 +15,45 @@ spring:
             - Path=/product-service/**
           filters:
             - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+        - id: forum-service
+          uri: lb://forum-service
+          predicates:
+            - Path=/forum-service/**
+          filters:
+            - RewritePath=/forum-service/(?<segment>.*), /$\{segment}
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/event-service/**
+          filters:
+            - RewritePath=/event-service/(?<segment>.*), /$\{segment}
+        # Swagger routes for each service
+        - id: product-service-docs
+          uri: lb://product-service
+          predicates:
+            - Path=/product-service/v3/api-docs
+          filters:
+            - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+        - id: order-service-docs
+          uri: lb://order-service
+          predicates:
+            - Path=/order-service/v3/api-docs
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+
 springdoc:
   swagger-ui:
+    path: /swagger-ui.html
     urls:
-      - name: Product Service
+      - name: product-service
         url: /product-service/v3/api-docs
-        displayName: Product Service
+      - name: order-service
+        url: /order-service/v3/api-docs
   api-docs:
     path: /v3/api-docs
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://keycloak-auth:8080/realms/ecommerce-realm
-          jwk-set-uri: http://keycloak-auth:8080/realms/ecommerce-realm/protocol/openid-connect/certs

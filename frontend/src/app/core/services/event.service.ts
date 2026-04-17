@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 })
 export class EventService {
   private http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/events`;
+  private readonly baseUrl = `${environment.eventApiUrl}`;
 
   getAllEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(this.baseUrl);

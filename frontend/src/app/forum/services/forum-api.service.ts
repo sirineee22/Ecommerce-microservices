@@ -71,7 +71,7 @@ function apiToDiscussion(api: DiscussionApi): Discussion {
 @Injectable({ providedIn: 'root' })
 export class ForumApiService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/forum`;
+  private baseUrl = `${environment.forumApiUrl}`;
 
   getDiscussions(categoryId?: string, search?: string): Observable<Discussion[]> {
     const params: Record<string, string> = {};

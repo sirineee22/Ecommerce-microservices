@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface OrderRequest {
   userId: number;
   productId: number;
   quantity: number;
-  unitPrice?: number;   // ← ajouter ? pour le rendre optionnel
+  unitPrice?: number;
 }
 
 export interface OrderResponse {
@@ -22,7 +23,7 @@ export interface OrderResponse {
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8082/api/orders';
+  private apiUrl = environment.orderApiUrl;
 
   constructor(private http: HttpClient) {}
 

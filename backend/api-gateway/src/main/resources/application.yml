@@ -5,27 +5,15 @@ spring:
     import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:8888
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:4200"
-            allowedMethods: "*"
-            allowedHeaders: "*"
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
-        - id: forum-service
-          uri: lb://forum-service
-          predicates:
-            - Path=/api/forum/**
-          filters:
-            - StripPrefix=1
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST:discovery-server}:8761/eureka/
+    registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true

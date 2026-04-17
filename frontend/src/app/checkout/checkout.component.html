@@ -1,1 +1,120 @@
-<p>checkout page</p>
+<main class="bg-gray-50 py-10 md:py-16 antialiased min-h-screen">
+  <section class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+
+    <!-- Success message -->
+    <div *ngIf="orderSuccess"
+      class="flex flex-col items-center justify-center gap-4 bg-white rounded-2xl shadow-md p-16 text-center">
+      <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900">Order Placed!</h2>
+      <p class="text-gray-500">Your order has been confirmed. Redirecting...</p>
+    </div>
+
+    <div *ngIf="!orderSuccess">
+      <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl font-['Poppins'] mb-8">Checkout</h2>
+
+      <div class="lg:flex lg:gap-8">
+
+        <!-- Left: Delivery form -->
+        <div class="flex-1 space-y-6">
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-md p-6 sm:p-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-6">Delivery Information</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                <input [(ngModel)]="firstName" type="text" placeholder="John"
+                  class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20"/>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                <input [(ngModel)]="lastName" type="text" placeholder="Doe"
+                  class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20"/>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input [(ngModel)]="email" type="email" placeholder="john@example.com"
+                  class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20"/>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                <input [(ngModel)]="address" type="text" placeholder="123 Main Street"
+                  class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20"/>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                <input [(ngModel)]="city" type="text" placeholder="Tunis"
+                  class="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 focus:border-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]/20"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment method (display only) -->
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-md p-6 sm:p-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
+            <div class="flex items-center gap-3 p-4 border-2 border-[#1E3A8A] rounded-xl bg-[#1E3A8A]/5">
+              <svg class="w-6 h-6 text-[#1E3A8A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              <span class="text-sm font-medium text-[#1E3A8A]">Cash on Delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Order summary -->
+        <div class="mt-6 lg:mt-0 lg:w-96">
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-md p-6 sm:p-8 space-y-4">
+            <h3 class="text-lg font-semibold text-gray-900">Order Summary</h3>
+
+            <!-- Items list -->
+            <div class="space-y-3 divide-y divide-gray-100">
+              <div *ngFor="let item of cartProducts" class="flex items-center gap-3 pt-3 first:pt-0">
+                <img [src]="item.product.urlImg" [alt]="item.product.name"
+                  class="w-12 h-12 object-contain rounded-lg border border-gray-100"/>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900 truncate">{{ item.product.name }}</p>
+                  <p class="text-xs text-gray-500">Qty: {{ item.quantity }}</p>
+                </div>
+                <p class="text-sm font-semibold text-[#1E3A8A]">
+                  {{ item.product.price * item.quantity | currency:'TND':'symbol':'1.2-2' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="border-t border-gray-200 pt-4 flex justify-between">
+              <span class="font-bold text-gray-900">Total</span>
+              <span class="font-bold text-[#1E3A8A]">{{ total | currency:'TND':'symbol':'1.2-2' }}</span>
+            </div>
+
+            <!-- Error -->
+            <div *ngIf="orderError"
+              class="p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+              {{ orderError }}
+            </div>
+
+            <!-- Place Order button -->
+            <button (click)="placeOrder()" [disabled]="isLoading"
+              class="w-full flex items-center justify-center gap-2 rounded-xl bg-[#1E3A8A] py-3 text-base font-medium text-white hover:bg-[#1e3a8a]/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+              <svg *ngIf="isLoading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              {{ isLoading ? 'Placing Order...' : 'Place Order' }}
+            </button>
+
+            <a routerLink="/cart"
+              class="flex items-center justify-center text-sm text-gray-500 hover:text-gray-700 transition-colors">
+              ← Back to Cart
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>

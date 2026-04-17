@@ -1,10 +1,15 @@
 {
   "realm": "ecommerce-realm",
   "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": false,
+  "rememberMe": true,
+  "resetPasswordAllowed": true,
+  "loginTheme": "keycloak",
   "roles": {
     "realm": [
-      { "name": "ADMIN" },
-      { "name": "USER" }
+      { "name": "ADMIN", "description": "Administrator role" },
+      { "name": "USER", "description": "Standard user role" }
     ]
   },
   "clients": [
@@ -13,22 +18,46 @@
       "enabled": true,
       "publicClient": true,
       "directAccessGrantsEnabled": true,
-      "webOrigins": ["*"],
-      "redirectUris": ["*"]
+      "standardFlowEnabled": true,
+      "webOrigins": ["http://localhost:4200"],
+      "redirectUris": ["http://localhost:4200/*"],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
+      "protocolMappers": [
+        {
+          "name": "realm roles mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ]
     }
   ],
   "users": [
     {
       "username": "admin",
       "enabled": true,
+      "email": "admin@myshop.com",
+      "firstName": "Admin",
+      "lastName": "MyShop",
       "credentials": [
         { "type": "password", "value": "admin", "temporary": false }
       ],
-      "realmRoles": ["ADMIN"]
+      "realmRoles": ["ADMIN", "USER"]
     },
     {
       "username": "user",
       "enabled": true,
+      "email": "user@myshop.com",
+      "firstName": "User",
+      "lastName": "MyShop",
       "credentials": [
         { "type": "password", "value": "user", "temporary": false }
       ],

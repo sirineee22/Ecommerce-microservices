@@ -2,4 +2,15 @@ spring:
   application:
     name: discovery-server
   config:
-    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:8888
+    import: "optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:8888"
+
+eureka:
+  instance:
+    hostname: discovery-server
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/
+  server:
+    enable-self-preservation: false

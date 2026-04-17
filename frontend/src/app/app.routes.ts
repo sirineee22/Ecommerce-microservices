@@ -11,28 +11,15 @@ import { NewPostComponent } from './forum/new-post/new-post.component';
 import { EventListComponent } from './event/event-list.component';
 import { EventFormComponent } from './event/event-form.component';
 import { EventDetailComponent } from './event/event-detail.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'admin',
-    component: ProductManagerComponent,
-  },
-  {
-    path: 'cart',
-    component: CartComponent,
-  },
-  {
-    path: 'products/:id',
-    component: ProductComponent,
-  },
-  {
-    path: 'PaymentSuccess',
-    component: PaymentSuccessComponent,
-  },
+  { path: '', component: HomeComponent },
+  { path: 'admin', component: ProductManagerComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'products/:id', component: ProductComponent },
+  { path: 'PaymentSuccess', component: PaymentSuccessComponent },
   {
     path: 'forum',
     component: ForumComponent,
@@ -42,20 +29,8 @@ export const routes: Routes = [
       { path: 'discussions/:id', component: DiscussionDetailComponent },
     ],
   },
-  {
-    path: 'events',
-    component: EventListComponent,
-  },
-  {
-    path: 'events/new',
-    component: EventFormComponent,
-  },
-  {
-    path: 'events/:id',
-    component: EventDetailComponent,
-  },
-  {
-    path: 'events/edit/:id',
-    component: EventFormComponent,
-  },
+  { path: 'events', component: EventListComponent },
+  { path: 'events/new', component: EventFormComponent },
+  { path: 'events/:id', component: EventDetailComponent },
+  { path: 'events/edit/:id', component: EventFormComponent },
 ];

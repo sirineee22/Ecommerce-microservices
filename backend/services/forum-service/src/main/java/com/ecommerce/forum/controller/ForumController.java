@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/forum")
-@CrossOrigin(origins = "*")
 public class ForumController {
 
     private final DiscussionRepository discussionRepository;
