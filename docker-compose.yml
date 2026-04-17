@@ -96,7 +96,6 @@ services:
     environment:
       - CONFIG_SERVER_HOST=config-server
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak-auth:8080/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak-auth:8080/realms/ecommerce-realm/protocol/openid-connect/certs
     depends_on:
       discovery-server:
