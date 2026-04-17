@@ -27,6 +27,12 @@ spring:
             - Path=/order-service/**
           filters:
             - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+        - id: delivery-service
+          uri: lb://delivery-service
+          predicates:
+            - Path=/delivery-service/**
+          filters:
+            - RewritePath=/delivery-service/(?<segment>.*), /$\{segment}
         - id: event-service
           uri: lb://event-service
           predicates:

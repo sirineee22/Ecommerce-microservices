@@ -121,6 +121,28 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  delivery-service:
+    build: ./backend/services/delivery-service
+    container_name: delivery-service
+    restart: on-failure
+    environment:
+      - CONFIG_SERVER_HOST=config-server
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/delivery_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_PROFILES_ACTIVE=mysql
+    depends_on:
+      discovery-server:
+        condition: service_started
+      mysql-db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+
   forum-service:
     build: ./backend/services/forum-service
     container_name: forum-service

@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS order_db;
 CREATE DATABASE IF NOT EXISTS event_service_db;
+CREATE DATABASE IF NOT EXISTS delivery_db;
 GRANT ALL PRIVILEGES ON order_db.* TO 'root'@'%';
 GRANT ALL PRIVILEGES ON event_service_db.* TO 'root'@'%';
+GRANT ALL PRIVILEGES ON delivery_db.* TO 'root'@'%';
 FLUSH PRIVILEGES;
