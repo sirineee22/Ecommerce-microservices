@@ -138,6 +138,7 @@ services:
     restart: on-failure
     environment:
       - CONFIG_SERVER_HOST=config-server
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/order_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
